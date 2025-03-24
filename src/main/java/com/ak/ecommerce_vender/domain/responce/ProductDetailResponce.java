@@ -1,12 +1,8 @@
 package com.ak.ecommerce_vender.domain.responce;
 
 import java.util.List;
-import java.util.Map;
-
-import org.springframework.core.io.Resource;
 
 import com.ak.ecommerce_vender.common.Category;
-import com.ak.ecommerce_vender.domain.entity.ProductVariant;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

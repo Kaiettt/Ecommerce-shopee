@@ -26,5 +26,5 @@ public class ProductVariantCreateRequest {
 
     private String productImage;
 
-    private List<ProductVariantAttribute> productAttributes;
+    private List<ProductVariantAttributeRequest> productAttributes;
 }

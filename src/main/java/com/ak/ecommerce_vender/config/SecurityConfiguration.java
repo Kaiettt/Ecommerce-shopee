@@ -46,7 +46,7 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         authz -> authz
-                        .requestMatchers("/api/v1/users","/api/v1/auth/**","/api/v1/products").permitAll()
+                        .requestMatchers("/api/v1/users","/api/v1/auth/**","/api/v1/products","/api/v1/product-variants/**","/api/v1/product-variants").permitAll()
                         // .requestMatchers(HttpMethod.POST,"/api/v1/products").hasAnyRole(Role.ADMIN.name())
                         // .requestMatchers(HttpMethod.DELETE,"/api/v1/products").hasAnyRole(Role.ADMIN.name())
                         .anyRequest().authenticated())

@@ -2,14 +2,12 @@ package com.ak.ecommerce_vender.service;
 
 import com.ak.ecommerce_vender.common.Common;
 import com.ak.ecommerce_vender.domain.entity.Product;
-import com.ak.ecommerce_vender.domain.entity.ProductImage;
 import com.ak.ecommerce_vender.domain.entity.ProductVariant;
 import com.ak.ecommerce_vender.domain.entity.Shop;
 import com.ak.ecommerce_vender.domain.request.ProductCreateRequest;
 import com.ak.ecommerce_vender.domain.responce.ProductOverviewResponce;
 import com.ak.ecommerce_vender.domain.responce.ProductDetailResponce;
 import com.ak.ecommerce_vender.domain.responce.ProductVariantResponce;
-import com.ak.ecommerce_vender.domain.responce.RestResponce;
 import com.ak.ecommerce_vender.domain.responce.ResultPaginationDTO;
 import com.ak.ecommerce_vender.domain.responce.ResultPaginationDTO.Meta;
 import com.ak.ecommerce_vender.error.EntityNotExistException;
@@ -25,7 +23,6 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 @Service
@@ -71,16 +68,15 @@ public class ProductService {
         List<ProductVariant> productVariants = this.productVariantRepository.findByProductId(id);
         List<ProductVariantResponce> productVariantResponces = new ArrayList<>();
         for (ProductVariant productVariant : productVariants) {
-            ProductImage productImagePath = productVariant.getProductImage();
-            Resource productImage = this.imageService.getImageResource(productImagePath.getImagePath()); 
             ProductVariantResponce productVariantResponce = ProductVariantResponce.builder()
                 .productVariantId(productVariant.getProductVariantId())
                 .productId(productVariant.getProduct().getId())
-                .productName(productVariant.getProduct().getName())
+                .productName(productVariant
+                .getProduct().getName())
                 .price(productVariant.getPrice())
                 .stockQuantity(productVariant.getStockQuantity())
                 .productAttributes(productVariant.getProductAttributes())
-                .image(productImage)
+                .image(productVariant.getImage())
                 .build();
             productVariantResponces.add(productVariantResponce);
         }
