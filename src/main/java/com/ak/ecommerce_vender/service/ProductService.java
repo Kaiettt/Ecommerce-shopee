@@ -6,12 +6,14 @@ import com.ak.ecommerce_vender.domain.entity.ProductVariant;
 import com.ak.ecommerce_vender.domain.entity.Shop;
 import com.ak.ecommerce_vender.domain.request.ProductCreateRequest;
 import com.ak.ecommerce_vender.domain.responce.ProductOverviewResponce;
+import com.ak.ecommerce_vender.domain.responce.AttributeResponce;
 import com.ak.ecommerce_vender.domain.responce.ProductDetailResponce;
 import com.ak.ecommerce_vender.domain.responce.ProductVariantResponce;
 import com.ak.ecommerce_vender.domain.responce.ResultPaginationDTO;
 import com.ak.ecommerce_vender.domain.responce.ResultPaginationDTO.Meta;
 import com.ak.ecommerce_vender.error.EntityNotExistException;
 import com.ak.ecommerce_vender.repository.ProductRepository;
+import com.ak.ecommerce_vender.repository.ProductVariantAttributeRepository;
 import com.ak.ecommerce_vender.repository.ProductVariantRepository;
 
 import lombok.AllArgsConstructor;
@@ -22,6 +24,8 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -33,6 +37,7 @@ public class ProductService {
     private final ProductVariantRepository productVariantRepository;
     private final ShopService shopService;
     private final ImageService imageService;
+    private final ProductVariantAttributeRepository productVariantAttributeRepository;
     public ProductDetailResponce createNewProduct(ProductCreateRequest request) throws IOException, GeneralSecurityException {
         Shop shop = this.shopService.getShopById(request.getShopID());
         
@@ -115,10 +120,26 @@ public class ProductService {
         return this.productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotExistException(Common.PRODUCT_NOT_FOUND));
     }
+    public int getTotalProductStock(List<ProductVariantResponce> productVariantResponces){
+        int total = 0;
+        for (ProductVariantResponce productVariantResponce : productVariantResponces) {
+            total += productVariantResponce.getStockQuantity();
+        }
+        return total;
+    }
+    public List<AttributeResponce> getAttributeAndImage(List<ProductVariantResponce> productVariantResponces){
+        List<Long> productVariantIdList = productVariantResponces.stream()
+                .map(ProductVariantResponce::getProductVariantId)
+                .collect(Collectors.toList());
+
+        List<AttributeResponce> attributeAndImageResponce = this.productVariantAttributeRepository.findAttributesByVariantIds(productVariantIdList);
+        return attributeAndImageResponce;
+    }
     public ProductDetailResponce getProductDetailByID(long id){
         Product product = this.getProductById(id);
         List<String> images = this.imageService.getProductImages(id);
         List<ProductVariantResponce> productVariantResponces = this.getProductVariantById(id);
+        List<AttributeResponce> attributeResponce = this.getAttributeAndImage(productVariantResponces);
         return ProductDetailResponce.builder()
         .id(product.getId())
         .name(product.getName())
@@ -127,7 +148,9 @@ public class ProductService {
         .category(product.getCategory())
         .price(product.getPrice())
         .brand(product.getBrand())
+        .StockQuantity(getTotalProductStock(productVariantResponces))
         .discount(product.getDiscount())
+        .attributeResponces(attributeResponce)
         .productVariants(productVariantResponces)
         .images(images)
         .shopId(product.getShop().getId()) 

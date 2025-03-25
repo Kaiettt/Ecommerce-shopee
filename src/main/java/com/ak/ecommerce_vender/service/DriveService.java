@@ -41,7 +41,7 @@ public class DriveService {
             FileContent mediaContent = new FileContent("image/jpeg", file);
             com.google.api.services.drive.model.File uploadedFile = drive.files().create(fileMetaData, mediaContent)
                     .setFields("id").execute();
-            imageUrl = "https://drive.google.com/uc?export=view&id="+uploadedFile.getId();
+            imageUrl = "https://drive.google.com/thumbnail?id="+uploadedFile.getId();
             System.out.println("IMAGE URL: " + imageUrl);
             file.delete();
         }catch (Exception e){

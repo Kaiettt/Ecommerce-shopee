@@ -2,10 +2,8 @@ package com.ak.ecommerce_vender.domain.responce;
 
 import java.util.List;
 
-import org.springframework.core.io.Resource;
 
 import com.ak.ecommerce_vender.domain.entity.ProductVariantAttribute;
-import com.ak.ecommerce_vender.domain.request.ProductVariantAttributeRequest;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

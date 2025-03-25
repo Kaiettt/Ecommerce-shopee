@@ -24,8 +24,10 @@ public class ProductDetailResponce {
     private Long price;
     private String brand;
     private Long discount;
+    private int StockQuantity;
     private List<ProductVariantResponce> productVariants;
     private List<String> images;
+    private List<AttributeResponce> attributeResponces;
     private long shopId;
     private String shopName;
 }

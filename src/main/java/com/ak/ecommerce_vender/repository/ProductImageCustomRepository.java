@@ -16,20 +16,13 @@ public class ProductImageCustomRepository {
 
     public List<ProductImage> findProductOverviewImageByProductId(long id) {
         return entityManager.createQuery(
-                "SELECT p FROM ProductImage p WHERE p.product.id = :id ORDER BY p.id ASC",
+                "SELECT p FROM ProductImage p WHERE p.product.id = :id",
                 ProductImage.class)
             .setParameter("id", id)
             .setMaxResults(1) // Fetch only the first result
             .getResultList();
     }
 
-    public List<ProductImage> findProductimageByProductId(long id) {
-        return entityManager.createQuery(
-                "SELECT p FROM ProductImage p WHERE p.product.id = :id",
-                ProductImage.class)
-            .setParameter("id", id)
-            .getResultList();
-    }
 
     
 }
