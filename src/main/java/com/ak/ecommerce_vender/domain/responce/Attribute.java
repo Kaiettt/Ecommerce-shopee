@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AttributeResponce {
+public class Attribute {
     String key;
     String value;
 

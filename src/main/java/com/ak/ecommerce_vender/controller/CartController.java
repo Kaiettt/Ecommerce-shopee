@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ak.ecommerce_vender.common.Common;
 import com.ak.ecommerce_vender.domain.request.CartDetailRequest;
-import com.ak.ecommerce_vender.domain.responce.CartDetailResponce;
+import com.ak.ecommerce_vender.domain.responce.AddToCartResponce;
 import com.ak.ecommerce_vender.domain.responce.CartResponce;
 import com.ak.ecommerce_vender.error.CheckRequest;
 import com.ak.ecommerce_vender.error.InvalidIdException;
@@ -35,7 +35,7 @@ public class CartController {
                 .body(this.cartService.getUserCart(Long.parseLong(id)));
     }
     @PostMapping("/add-to-cart")
-    public ResponseEntity<CartDetailResponce> addProductToCart(@RequestBody CartDetailRequest request) {
+    public ResponseEntity<AddToCartResponce> addProductToCart(@RequestBody CartDetailRequest request) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(this.cartService.addProductToCart(request));
     }

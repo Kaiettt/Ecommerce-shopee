@@ -27,7 +27,7 @@ public class ProductDetailResponce {
     private int StockQuantity;
     private List<ProductVariantResponce> productVariants;
     private List<String> images;
-    private List<AttributeResponce> attributeResponces;
+    private List<Attribute> attributeResponces;
     private long shopId;
     private String shopName;
 }

@@ -1,6 +1,7 @@
 package com.ak.ecommerce_vender.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -11,8 +12,10 @@ import com.ak.ecommerce_vender.domain.entity.Product;
 import com.ak.ecommerce_vender.domain.entity.ProductVariant;
 import com.ak.ecommerce_vender.domain.entity.User;
 import com.ak.ecommerce_vender.domain.request.CartDetailRequest;
+import com.ak.ecommerce_vender.domain.responce.AddToCartResponce;
 import com.ak.ecommerce_vender.domain.responce.CartDetailResponce;
 import com.ak.ecommerce_vender.domain.responce.CartResponce;
+import com.ak.ecommerce_vender.error.EntityNotExistException;
 import com.ak.ecommerce_vender.repository.CartDetailRepository;
 import com.ak.ecommerce_vender.repository.CartRepository;
 import com.ak.ecommerce_vender.util.SecurityUtil;
@@ -37,17 +40,37 @@ public class CartService {
                 .build();
             cart = this.cartRepository.save(cart);
         }
+        List<CartDetail> cartDetails = cart.getCartDetails();
+        List<CartDetailResponce> cartDetailResponces = new ArrayList<>();
+        for (CartDetail cartDetail : cartDetails) {
+            Product product = cartDetail.getProduct();
+            ProductVariant productVariant = cartDetail.getProductVariant();
+            CartDetailResponce cartResponce = CartDetailResponce.builder()
+                .id(cartDetail.getId())
+                .productName(product.getName())
+                .productPrice(product.getPrice())
+                .currentAttributes(productVariant.getProductAttributes())
+                .image(productVariant.getImage())
+                .quantity(cartDetail.getQuantity())
+                .totalPrice(cartDetail.getPrice())
+                .build();
+            cartDetailResponces.add(cartResponce);
+        }
         CartResponce cartResponce = CartResponce.builder()
             .id(cart.getId())
             .quantity(cart.getQuantity())
             .totalPrice(cart.getTotal_price())
             .userID(cart.getUser().getId())
+            .cartDetailResponces(cartDetailResponces)
             .username(cart.getUser().getUsername())
             .build();
         return cartResponce;
     }
-    public CartDetailResponce addProductToCart(CartDetailRequest request) {
+    public AddToCartResponce addProductToCart(CartDetailRequest request) throws EntityNotExistException{
     Optional<String> userLoginInfo = SecurityUtil.getCurrentUserLogin();
+    if(!userLoginInfo.isPresent()){
+        throw new EntityNotExistException("Please login");
+    }
     String email = userLoginInfo.get();
     User user = this.userService.getUserByUserName(email);
 
@@ -85,7 +108,7 @@ public class CartService {
         cartDetail.setPrice(cartDetail.getPrice() + newPrice);
     }
     cartDetail = this.cartDetailRepository.save(cartDetail);
-    CartDetailResponce cartDetailResponce = CartDetailResponce.builder()
+    AddToCartResponce cartDetailResponce = AddToCartResponce.builder()
         .cart_id(cart.getId())
         .id(cartDetail.getId())
         .price(cartDetail.getPrice())

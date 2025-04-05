@@ -1,22 +1,21 @@
 package com.ak.ecommerce_vender.domain.responce;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Getter;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
-public class CartResponce {
+public class AddToCartResponce {
     private long id;
+    private long price;
     private long quantity;
-    private long totalPrice;
-    private String username;
-    private long userID;
-    List<CartDetailResponce> cartDetailResponces;
+    private long cart_id;
+    private long productId;
+    private long productVariantID;
 }

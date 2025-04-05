@@ -6,7 +6,7 @@ import com.ak.ecommerce_vender.domain.entity.ProductVariant;
 import com.ak.ecommerce_vender.domain.entity.Shop;
 import com.ak.ecommerce_vender.domain.request.ProductCreateRequest;
 import com.ak.ecommerce_vender.domain.responce.ProductOverviewResponce;
-import com.ak.ecommerce_vender.domain.responce.AttributeResponce;
+import com.ak.ecommerce_vender.domain.responce.Attribute;
 import com.ak.ecommerce_vender.domain.responce.ProductDetailResponce;
 import com.ak.ecommerce_vender.domain.responce.ProductVariantResponce;
 import com.ak.ecommerce_vender.domain.responce.ResultPaginationDTO;
@@ -127,19 +127,19 @@ public class ProductService {
         }
         return total;
     }
-    public List<AttributeResponce> getAttributeAndImage(List<ProductVariantResponce> productVariantResponces){
+    public List<Attribute> getAttributeAndImage(List<ProductVariantResponce> productVariantResponces){
         List<Long> productVariantIdList = productVariantResponces.stream()
                 .map(ProductVariantResponce::getProductVariantId)
                 .collect(Collectors.toList());
 
-        List<AttributeResponce> attributeAndImageResponce = this.productVariantAttributeRepository.findAttributesByVariantIds(productVariantIdList);
+        List<Attribute> attributeAndImageResponce = this.productVariantAttributeRepository.findAttributesByVariantIds(productVariantIdList);
         return attributeAndImageResponce;
     }
     public ProductDetailResponce getProductDetailByID(long id){
         Product product = this.getProductById(id);
         List<String> images = this.imageService.getProductImages(id);
         List<ProductVariantResponce> productVariantResponces = this.getProductVariantById(id);
-        List<AttributeResponce> attributeResponce = this.getAttributeAndImage(productVariantResponces);
+        List<Attribute> attributeResponce = this.getAttributeAndImage(productVariantResponces);
         return ProductDetailResponce.builder()
         .id(product.getId())
         .name(product.getName())

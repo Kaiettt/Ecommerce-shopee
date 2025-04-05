@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ak.ecommerce_vender.domain.entity.ProductVariantAttribute;
-import com.ak.ecommerce_vender.domain.responce.AttributeResponce;
+import com.ak.ecommerce_vender.domain.responce.Attribute;
 
 public interface ProductVariantAttributeRepository extends JpaRepository<ProductVariantAttribute, Long>, JpaSpecificationExecutor<ProductVariantAttribute>{
     @Query(value = """
@@ -21,5 +21,5 @@ public interface ProductVariantAttributeRepository extends JpaRepository<Product
         WHERE pv.product_variant_id IN :variantIds
         GROUP BY pva.attribute
         """, nativeQuery = true)
-    List<AttributeResponce> findAttributesByVariantIds(@Param("variantIds") List<Long> variantIds);
+    List<Attribute> findAttributesByVariantIds(@Param("variantIds") List<Long> variantIds);
 }

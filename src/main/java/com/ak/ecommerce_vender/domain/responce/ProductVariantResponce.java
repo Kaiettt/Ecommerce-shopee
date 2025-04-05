@@ -21,7 +21,7 @@ public class ProductVariantResponce {
     private long productId;
     private String productName;
     private long price;
-    private long stockQuantity;
+    private long stockQuantity; 
     private List<ProductVariantAttribute> productAttributes;
     private String image;
 }
